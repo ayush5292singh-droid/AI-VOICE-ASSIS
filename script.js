@@ -1,27 +1,73 @@
 const send = document.getElementById("send");
 const input = document.getElementById("textInput");
 const chat = document.getElementById("chat");
+const mic = document.getElementById("mic");
 
 
-send.onclick = function(){
+send.onclick = () => {
     sendMessage();
 };
 
 
 input.addEventListener("keypress", function(e){
-
     if(e.key === "Enter"){
         sendMessage();
     }
-
 });
 
 
+// 🎤 Voice Recognition
+
+mic.onclick = function(){
+
+    const SpeechRecognition = 
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+
+    if(!SpeechRecognition){
+        alert("Voice recognition is not supported on this browser");
+        return;
+    }
+
+
+    let recognition = new SpeechRecognition();
+
+    recognition.lang = "en-US";
+
+    recognition.start();
+
+
+    mic.innerHTML="🔴";
+
+
+    recognition.onresult = function(event){
+
+        let voiceText = event.results[0][0].transcript;
+
+        input.value = voiceText;
+
+        sendMessage();
+
+    };
+
+
+    recognition.onend=function(){
+
+        mic.innerHTML="🎤";
+
+    };
+
+};
+
+
+
+// Send Message
+
 function sendMessage(){
 
-    let text = input.value.trim();
+    let text=input.value.trim();
 
-    if(text === ""){
+    if(text===""){
         return;
     }
 
@@ -33,9 +79,7 @@ function sendMessage(){
 
     setTimeout(()=>{
 
-        let reply = getAIReply(text);
-
-        addMessage(reply,"ai");
+        addMessage(getAIReply(text),"ai");
 
     },700);
 
@@ -43,9 +87,11 @@ function sendMessage(){
 
 
 
+// Add Chat Bubble
+
 function addMessage(text,type){
 
-    let div = document.createElement("div");
+    let div=document.createElement("div");
 
     div.className="message "+type;
 
@@ -59,30 +105,27 @@ function addMessage(text,type){
 
 
 
+// Basic AI
+
 function getAIReply(message){
 
-    message = message.toLowerCase();
+    message=message.toLowerCase();
 
 
     if(message.includes("hello") || message.includes("hi")){
-        return "Hello! Nice to talk with you 😊";
+        return "Hello! I am listening.";
     }
 
 
-    if(message.includes("name")){
-        return "I am Nova AI, your personal assistant.";
+    if(message.includes("your name")){
+        return "I am Nova AI.";
     }
 
 
-    if(message.includes("time")){
-        return "I can help you check time in the future with a clock feature.";
+    if(message.includes("how are you")){
+        return "I am working perfectly!";
     }
 
 
-    if(message.includes("who are you")){
-        return "I am an AI assistant created for this app.";
-    }
-
-
-    return "I am learning! Soon I will become smarter with more features.";
+    return "I understood: "+message;
 }
