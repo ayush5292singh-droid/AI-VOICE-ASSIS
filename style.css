@@ -1,0 +1,122 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    height:100vh;
+    background:#050816;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+}
+
+
+.app{
+    width:380px;
+    height:650px;
+    background:#0d1326;
+    border-radius:25px;
+    overflow:hidden;
+    box-shadow:0 0 30px #00eaff;
+    border:1px solid #00eaff;
+}
+
+
+header{
+    height:100px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:20px;
+    background:linear-gradient(135deg,#001f3f,#003b5c);
+}
+
+
+.logo{
+    font-size:45px;
+}
+
+
+h1{
+    color:#00eaff;
+    font-size:25px;
+}
+
+
+header p{
+    color:#aaa;
+    font-size:13px;
+}
+
+
+
+#chat{
+    height:450px;
+    padding:15px;
+    overflow-y:auto;
+}
+
+
+.message{
+    max-width:80%;
+    padding:12px;
+    margin:10px 0;
+    border-radius:15px;
+    font-size:15px;
+}
+
+
+.ai{
+    background:#172554;
+    border-bottom-left-radius:0;
+}
+
+
+.user{
+    background:#00a8ff;
+    color:black;
+    margin-left:auto;
+    border-bottom-right-radius:0;
+}
+
+
+
+.input-area{
+    height:100px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:15px;
+    background:#080c18;
+}
+
+
+input{
+    flex:1;
+    padding:14px;
+    border-radius:20px;
+    border:none;
+    outline:none;
+    background:#1b2438;
+    color:white;
+}
+
+
+button{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    border:none;
+    cursor:pointer;
+    background:#00eaff;
+    font-size:20px;
+}
+
+
+button:hover{
+    transform:scale(1.1);
+}
