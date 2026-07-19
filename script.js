@@ -18,7 +18,7 @@ input.addEventListener("keypress", function(e){
 });
 
 
-// Voice button
+// 🎤 Voice Recognition
 
 mic.onclick = function(){
 
@@ -27,7 +27,7 @@ window.SpeechRecognition || window.webkitSpeechRecognition;
 
 
 if(!SpeechRecognition){
-alert("Voice not supported");
+alert("Voice recognition not supported");
 return;
 }
 
@@ -43,7 +43,7 @@ mic.innerHTML="🔴";
 
 recognition.onresult=function(event){
 
-let text=event.results[0][0].transcript;
+let text = event.results[0][0].transcript;
 
 input.value=text;
 
@@ -78,7 +78,11 @@ input.value="";
 
 setTimeout(()=>{
 
-addMessage(getAIReply(text),"ai");
+let reply=getAIReply(text);
+
+addMessage(reply,"ai");
+
+speak(reply);
 
 },700);
 
@@ -104,6 +108,24 @@ chat.scrollTop=chat.scrollHeight;
 
 
 
+// 🔊 AI Speaking Function
+
+function speak(text){
+
+let speech = new SpeechSynthesisUtterance(text);
+
+speech.lang="en-US";
+
+speech.rate=1;
+
+speech.pitch=1;
+
+window.speechSynthesis.speak(speech);
+
+}
+
+
+
 // AI Brain
 
 function getAIReply(msg){
@@ -111,100 +133,59 @@ function getAIReply(msg){
 let text=msg.toLowerCase();
 
 
-
-// Remember name
-
 if(text.includes("my name is")){
 
 userName=msg.split("is")[1].trim();
 
-return "Nice to meet you "+userName+"! I will remember your name.";
+return "Nice to meet you "+userName;
 
 }
-
 
 
 if(text.includes("what is my name")){
 
-if(userName!==""){
-return "Your name is "+userName+".";
-}
-
-return "You have not told me your name yet.";
+return userName ?
+"Your name is "+userName :
+"I don't know your name yet.";
 
 }
 
-
-
-// Greetings
 
 if(text.includes("hello") || text.includes("hi")){
 
-return "Hello "+(userName || "friend")+"! How can I help you?";
+return "Hello "+(userName || "friend")+"! I am listening.";
 
 }
 
-
-
-// Time
 
 if(text.includes("time")){
 
-return "Current time is "+new Date().toLocaleTimeString();
+return "The time is "+new Date().toLocaleTimeString();
 
 }
 
 
-
-// Date
-
-if(text.includes("date") || text.includes("today")){
+if(text.includes("date")){
 
 return "Today is "+new Date().toDateString();
 
 }
 
 
-
-// Calculator
-
-if(text.includes("calculate")){
-
-try{
-
-let equation=text.replace("calculate","");
-
-return "Answer: "+eval(equation);
-
-}
-
-catch{
-
-return "I could not calculate that.";
-
-}
-
-}
-
-
-
-// AI personality
-
 if(text.includes("who are you")){
 
-return "I am Nova AI, your personal digital assistant.";
+return "I am Nova AI, your personal voice assistant.";
 
 }
 
 
 if(text.includes("thank")){
 
-return "You're welcome! 😊";
+return "You are welcome!";
 
 }
 
 
+return "I am learning and improving. Tell me something new.";
 
-return "I am improving every day. Tell me more!";
-
-} 
+}
