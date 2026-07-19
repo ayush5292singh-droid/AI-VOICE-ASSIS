@@ -3,6 +3,8 @@ const input = document.getElementById("textInput");
 const chat = document.getElementById("chat");
 const mic = document.getElementById("mic");
 
+let userName = "";
+
 
 send.onclick = () => {
     sendMessage();
@@ -16,46 +18,43 @@ input.addEventListener("keypress", function(e){
 });
 
 
-// 🎤 Voice Recognition
+// Voice button
 
 mic.onclick = function(){
 
-    const SpeechRecognition = 
-    window.SpeechRecognition || window.webkitSpeechRecognition;
+const SpeechRecognition =
+window.SpeechRecognition || window.webkitSpeechRecognition;
 
 
-    if(!SpeechRecognition){
-        alert("Voice recognition is not supported on this browser");
-        return;
-    }
+if(!SpeechRecognition){
+alert("Voice not supported");
+return;
+}
 
 
-    let recognition = new SpeechRecognition();
+let recognition = new SpeechRecognition();
 
-    recognition.lang = "en-US";
+recognition.lang="en-US";
 
-    recognition.start();
+recognition.start();
 
-
-    mic.innerHTML="🔴";
-
-
-    recognition.onresult = function(event){
-
-        let voiceText = event.results[0][0].transcript;
-
-        input.value = voiceText;
-
-        sendMessage();
-
-    };
+mic.innerHTML="🔴";
 
 
-    recognition.onend=function(){
+recognition.onresult=function(event){
 
-        mic.innerHTML="🎤";
+let text=event.results[0][0].transcript;
 
-    };
+input.value=text;
+
+sendMessage();
+
+};
+
+
+recognition.onend=function(){
+mic.innerHTML="🎤";
+};
 
 };
 
@@ -65,67 +64,147 @@ mic.onclick = function(){
 
 function sendMessage(){
 
-    let text=input.value.trim();
+let text=input.value.trim();
 
-    if(text===""){
-        return;
-    }
-
-
-    addMessage(text,"user");
-
-    input.value="";
+if(text===""){
+return;
+}
 
 
-    setTimeout(()=>{
+addMessage(text,"user");
 
-        addMessage(getAIReply(text),"ai");
+input.value="";
 
-    },700);
+
+setTimeout(()=>{
+
+addMessage(getAIReply(text),"ai");
+
+},700);
 
 }
 
 
 
-// Add Chat Bubble
+// Add message
 
 function addMessage(text,type){
 
-    let div=document.createElement("div");
+let div=document.createElement("div");
 
-    div.className="message "+type;
+div.className="message "+type;
 
-    div.innerHTML=text;
+div.innerHTML=text;
 
-    chat.appendChild(div);
+chat.appendChild(div);
 
-    chat.scrollTop=chat.scrollHeight;
+chat.scrollTop=chat.scrollHeight;
 
 }
 
 
 
-// Basic AI
+// AI Brain
 
-function getAIReply(message){
+function getAIReply(msg){
 
-    message=message.toLowerCase();
-
-
-    if(message.includes("hello") || message.includes("hi")){
-        return "Hello! I am listening.";
-    }
+let text=msg.toLowerCase();
 
 
-    if(message.includes("your name")){
-        return "I am Nova AI.";
-    }
 
+// Remember name
 
-    if(message.includes("how are you")){
-        return "I am working perfectly!";
-    }
+if(text.includes("my name is")){
 
+userName=msg.split("is")[1].trim();
 
-    return "I understood: "+message;
+return "Nice to meet you "+userName+"! I will remember your name.";
+
 }
+
+
+
+if(text.includes("what is my name")){
+
+if(userName!==""){
+return "Your name is "+userName+".";
+}
+
+return "You have not told me your name yet.";
+
+}
+
+
+
+// Greetings
+
+if(text.includes("hello") || text.includes("hi")){
+
+return "Hello "+(userName || "friend")+"! How can I help you?";
+
+}
+
+
+
+// Time
+
+if(text.includes("time")){
+
+return "Current time is "+new Date().toLocaleTimeString();
+
+}
+
+
+
+// Date
+
+if(text.includes("date") || text.includes("today")){
+
+return "Today is "+new Date().toDateString();
+
+}
+
+
+
+// Calculator
+
+if(text.includes("calculate")){
+
+try{
+
+let equation=text.replace("calculate","");
+
+return "Answer: "+eval(equation);
+
+}
+
+catch{
+
+return "I could not calculate that.";
+
+}
+
+}
+
+
+
+// AI personality
+
+if(text.includes("who are you")){
+
+return "I am Nova AI, your personal digital assistant.";
+
+}
+
+
+if(text.includes("thank")){
+
+return "You're welcome! 😊";
+
+}
+
+
+
+return "I am improving every day. Tell me more!";
+
+} 
